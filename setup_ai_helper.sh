@@ -96,7 +96,7 @@ if ! ollama list | grep -q "$model"; then
 fi
 
 # Create the helper script
-script_content=f"""
+script_content="""
 #!/bin/bash
 
 # Check if a prompt was provided
