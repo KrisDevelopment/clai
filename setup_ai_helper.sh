@@ -96,7 +96,7 @@ if ! ollama list | grep -q "$model"; then
 fi
 
 # Create the helper script
-script_content=f"""
+script_content="""
 #!/bin/bash
 
 # Check if a prompt was provided
@@ -141,6 +141,21 @@ EOF
 
 # Make the helper script executable
 chmod +x /usr/local/bin/helpwith
+
+
+# install openinterpreter - allows AI to run code
+read -p "Do you want to install openinterpreter to enable AI code execution? (y/n): " confirm
+if [ "$confirm" == "y" ]; then
+    echo "Installing openinterpreter..."
+    
+    # run the openinterpreter setup script
+    local_script_path=$(dirname "$0")
+    
+    if ! bash "$local_script_path/openinterpreter.sh"; then
+        echo "Error: Failed to install openinterpreter. Please check the logs for more information."
+        exit 1
+    fi  
+fi
 
 echo " === DONE ==="
 echo "Setup complete! You can now use 'helpwith' followed by your question."
