@@ -108,8 +108,13 @@ fi
 # Combine all arguments into a single prompt
 prompt=\"\$*\"
 
+# Check stdin for input
+if [ -p /dev/stdin ]; then
+    prompt=\"\$prompt \$(cat)\"
+fi
+
+
 # Send prompt to Ollama
-echo \"Thinking...\"
 if ! ollama run $model \"\$prompt\"; then
     echo \"Error: Failed to process the request. Ensure the Ollama service is running.\"
     exit 1
