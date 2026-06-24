@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    profiles: ["gpu"]
+    ports:
+      - "11434:11434"
+    volumes:
+#      - ollama-data:/root/.ollama
+      - /usr/share/ollama/.ollama:/root/.ollama
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  ollama-cpu:
+    image: ollama/ollama:latest
+    profiles: ["cpu"]
+    ports:
+      - "11434:11434"
+    volumes:
+#      - ollama-data:/root/.ollama
+      - /usr/share/ollama/.ollama:/root/.ollama
+    restart: unless-stopped
+
+volumes:
+  ollama-data:
